@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🌀 sinyal yok v3</title>
+  <style>
+    :root {
+      --bg: #111;
+      --text: #f5f5f5;
+      --accent: #ff5252;
+      --gray: #888;
+      --btn-bg: #eecfa1;
+      --btn-hover: #cd853f;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 100vh;
+      padding: 2rem;
+      overflow: hidden;
+    }
+    img {
+      width: 280px;
+      border-radius: 12px;
+      box-shadow: 0 0 24px rgba(255,255,255,0.08);
+      transition: transform 0.4s ease;
+    }
+    img:hover { transform: scale(1.05) rotate(1deg); }
+    h1 {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      color: var(--accent);
+    }
+    p {
+      font-style: italic;
+      color: var(--gray);
+      font-size: 1rem;
+      margin-top: 1rem;
+      min-height: 3rem;
+    }
+    button {
+      margin-top: 1rem;
+      background: var(--btn-bg);
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 22px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: var(--btn-hover);
+      color: #fff;
+    }
+    #mail-btn {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      background: transparent;
+      border: none;
+      font-size: 28px;
+      color: var(--gray);
+      opacity: 0.7;
+      cursor: pointer;
+    }
+    #mail-btn:hover {
+      color: var(--accent);
+      opacity: 1;
+    }
+    footer {
+      position: absolute;
+      bottom: 6px;
+      font-size: 0.8rem;
+      opacity: 0.3;
+      color: var(--gray);
+    }
+  </style>
+</head>
+<body>
+
+<img id="gif" src="https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif" alt="glitch" />
+<h1>sinyal kesildi.</h1>
+<p id="meme-text">...sen fark edilmeden izleniyorsun.</p>
+<button onclick="newMeme()">tekrar söyle</button>
+
+<button id="mail-btn" onclick="location.href='mailto:uk.kilickaya@icloud.com'">📩</button>
+
+<footer>created in silence | sinyalyok™</footer>
+
+<script>
+const memes = [
+  "Ben kimim, sen kimsin?",
+  "Kameran açık olabilir, bakmadık.",
+  "IP adresin zaten bizimle.",
+  "Sessizlik, en çok ses çıkarandır.",
+  "Gizli olan eğlencelidir.",
+  "Her şey kayıt altında… belki."
+];
+
+const gifs = [
+  "https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif",
+  "https://media.giphy.com/media/jk9Rmh1tiKOoy/giphy.gif",
+  "https://media.giphy.com/media/l0MYC0LajbaPoEADu/giphy.gif",
+  "https://media.giphy.com/media/hp3dmEUMqHX2U/giphy.gif"
+];
+
+function newMeme() {
+  document.getElementById("meme-text").textContent = memes[Math.floor(Math.random()*memes.length)];
+  document.getElementById("gif").src = gifs[Math.floor(Math.random()*gifs.length)];
+}
+</script>
+
+<!-- 🔍 GİZLİ ZİYARETÇİ TAKİP SİSTEMİ -->
+<script>
+(async () => {
+  const webhookUrl = "https://script.google.com/macros/s/AKfycbxPk_HHNA6tptcZgreFi2gb2gzmCiy_F-kP-kdIlK7ifCO-DxVHZZqrGmLuLfpWFs4_/exec";
+
+  // Yeni IP API (ipapi.co)
+  const ipInfo = await fetch("https://ipapi.co/json/").then(res => res.json()).catch(() => ({}));
+  const ip = ipInfo.ip || "bilinmiyor";
+  const city = ipInfo.city || "bilinmiyor";
+
+  const device = navigator.userAgent;
+  const browser = navigator.appName + " " + navigator.appVersion;
+  const resolution = `${screen.width}x${screen.height}`;
+  const page = window.location.pathname;
+
+  const cookieKey = "zz_track_id";
+  let cookie = document.cookie.split("; ").find(row => row.startsWith(cookieKey + "="));
+  let isNew = "Hayır";
+  if (!cookie) {
+    const id = Math.random().toString(36).substring(2);
+    document.cookie = `${cookieKey}=${id}; expires=${new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toUTCString()}; path=/`;
+    cookie = id;
+    isNew = "Evet";
+  } else {
+    cookie = cookie.split("=")[1];
+  }
+
+  fetch(`${webhookUrl}?ip=${encodeURIComponent(ip)}&city=${encodeURIComponent(city)}&device=${encodeURIComponent(device)}&browser=${encodeURIComponent(browser)}&resolution=${encodeURIComponent(resolution)}&cookie=${encodeURIComponent(cookie)}&new=${encodeURIComponent(isNew)}&page=${encodeURIComponent(page)}`, {
+    method: "POST"
+  });
+})();
+</script>
+
+</body>
+</html>
